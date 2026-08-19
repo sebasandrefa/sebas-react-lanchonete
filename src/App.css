@@ -448,6 +448,46 @@ button {
   gap: 6px;
 }
 
+.brand-showcase {
+  background: #2e1c15;
+  border-radius: 17px;
+  box-shadow: 0 16px 32px rgba(50, 30, 20, 0.15);
+  min-height: 410px;
+  overflow: hidden;
+  position: relative;
+}
+
+.showcase-main-image {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  transform: scale(1.04);
+  width: 100%;
+}
+
+.showcase-detail-image {
+  border: 3px solid #fff;
+  border-radius: 12px;
+  height: 96px;
+  object-fit: cover;
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  transform: rotate(4deg);
+  width: 96px;
+  z-index: 1;
+}
+
+.side-photo-card {
+  border-radius: 17px;
+  box-shadow: 0 12px 25px rgba(50, 30, 20, 0.12);
+  display: block;
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
 .order-message {
   margin: 14px 0 0;
   border-radius: 9px;

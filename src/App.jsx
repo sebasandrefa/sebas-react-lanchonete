@@ -408,6 +408,27 @@ function App() {
                 </p>
               )}
             </div>
+
+            <section className="brand-showcase" aria-label="Destaques da Lanchonete Sebas">
+              <img
+                className="showcase-main-image"
+                src={products[0].image}
+                alt="Hambúrguer artesanal Sebas"
+              />
+              <img
+                className="showcase-detail-image"
+                src={products[3].image}
+                alt="Porção de batata frita"
+              />
+
+            </section>
+
+            <img
+              className="side-photo-card"
+              src={products[5].image}
+              alt="Cookie com gotas de chocolate"
+            />
+
           </aside>
         </main>
       ) : (
