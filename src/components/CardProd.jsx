@@ -1,25 +1,38 @@
-import "./CardProd.css";
-
-function CardProd({ produto, adicionar }) {
+function CardProd({ produto, adicionarCarrinho }) {
   return (
     <div className="card-produto">
+
       <img
         src={produto.imagem}
         alt={produto.nome}
       />
 
-      <h3>{produto.nome}</h3>
+      <span className="categoria">
+        {produto.categoria}
+      </span>
+
+      <h3>
+        {produto.nome}
+      </h3>
 
       <p>
-        R${" "}
-        {Number(produto.preco)
-          .toFixed(2)
-          .replace(".", ",")}
+        {produto.descricao}
       </p>
 
-      <button onClick={() => adicionar(produto)}>
-        Adicionar ao carrinho
-      </button>
+      <div className="produto-bottom">
+
+        <strong>
+          R$ {produto.preco.toFixed(2).replace(".", ",")}
+        </strong>
+
+        <button
+          onClick={() => adicionarCarrinho(produto)}
+        >
+          Adicionar
+        </button>
+
+      </div>
+
     </div>
   );
 }
