@@ -20,6 +20,41 @@ button {
   cursor: pointer;
 }
 
+.login-page {
+  align-items: center;
+  background: linear-gradient(110deg, #291b16, #77331b);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.login-screen-card {
+  max-width: 390px;
+  width: 100%;
+}
+
+.login-screen-title {
+  color: #291b16;
+  text-align: center;
+}
+
+.login-screen-title svg {
+  color: #ed4819;
+}
+
+.login-screen-title h1 {
+  font-size: 25px;
+  margin: 10px 0 8px;
+}
+
+.login-screen-title p {
+  color: #756b67;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 26px;
+}
+
 .app {
   min-height: 100vh;
   background: #faf9f7;
@@ -81,6 +116,57 @@ button {
 
 .kitchen-button:hover {
   transform: translateY(-2px);
+}
+
+.hero-actions {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-menu {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.account-details {
+  align-items: center;
+  color: #fff3ed;
+  display: flex;
+  gap: 8px;
+}
+
+.account-details > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-details strong {
+  font-size: 13px;
+}
+
+.account-details span {
+  color: #eadbd3;
+  font-size: 11px;
+}
+
+.logout-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 9px;
+  color: white;
+  display: flex;
+  font-size: 12px;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* MAIN */
@@ -362,6 +448,17 @@ button {
   gap: 6px;
 }
 
+.order-message {
+  margin: 14px 0 0;
+  border-radius: 9px;
+  background: #e6f7ed;
+  color: #146c3a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 11px;
+  text-align: center;
+}
+
 /* TEAM */
 
 .team-section {
@@ -576,6 +673,10 @@ button {
     padding: 40px 25px;
     flex-direction: column;
     gap: 25px;
+  }
+
+  .hero-actions {
+    align-items: flex-start;
   }
 
   .main-container {

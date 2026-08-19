@@ -6,6 +6,8 @@ import {
   Trash2,
   ArrowRight,
   LogIn,
+  LogOut,
+  UserRound,
 } from "lucide-react";
 import "./App.css";
 
@@ -69,8 +71,8 @@ const products = [
 const team = [
   ["Felipe", "Garçom", "Turno Manhã"],
   ["Luiz", "Chapeiro", "Turno Tarde"],
-  ["Sebastian", "Segurança", "Turno Noite"],
-  ["Peruzzo", "CEO", "Turno Integral"],
+  ["Sebastian", "CEO", "Turno Integral"],
+  ["Peruzzo", "Segurança", "Turno Noite"],
 ];
 
 function App() {
@@ -81,9 +83,11 @@ function App() {
   const [password, setPassword] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
   const [role, setRole] = useState(null);
+  const [orderMessage, setOrderMessage] = useState("");
 
   const addToCart = (product) => {
     setCart((current) => [...current, product]);
+    setOrderMessage("");
   };
 
   const removeFromCart = (index) => {
@@ -93,6 +97,11 @@ function App() {
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   const finishOrder = () => {
+    if (!role) {
+      setLoginMessage("Faça login antes de finalizar o pedido.");
+      return;
+    }
+
     if (cart.length === 0) {
       alert("Adicione produtos ao carrinho primeiro.");
       return;
@@ -122,10 +131,14 @@ function App() {
       },
     ]);
     setCart([]);
-    setView("kitchen");
+    setOrderMessage("Pedido enviado para a cozinha!");
   };
 
   const updateOrderStatus = (orderId, status) => {
+    if (role !== "admin") {
+      return;
+    }
+
     if (status === "Entregue") {
       setOrders((currentOrders) =>
         currentOrders.filter((order) => order.id !== orderId),
@@ -179,6 +192,57 @@ function App() {
     setView("kitchen");
   };
 
+  const logout = () => {
+    setRole(null);
+    setUser("");
+    setPassword("");
+    setLoginMessage("");
+    setOrderMessage("");
+    setView("menu");
+  };
+
+  if (!role) {
+    return (
+      <main className="login-page">
+        <div className="login-card login-screen-card">
+          <div className="login-screen-title">
+            <UtensilsCrossed size={28} />
+            <h1>Lanchonete Sebas</h1>
+            <p>Entre para acessar o cardápio e fazer seu pedido.</p>
+          </div>
+
+          <label>Usuário</label>
+          <input
+            type="text"
+            placeholder="cliente ou admin"
+            value={user}
+            onChange={(event) => setUser(event.target.value)}
+          />
+
+          <label>Senha</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            onKeyDown={(event) => event.key === "Enter" && handleLogin()}
+          />
+
+          <button className="login-button" onClick={handleLogin}>
+            <LogIn size={17} />
+            Entrar
+          </button>
+
+          {loginMessage && (
+            <p className="login-message" role="status">
+              {loginMessage}
+            </p>
+          )}
+        </div>
+      </main>
+    );
+  }
+
   return (
     <div className="app">
       <header className="hero">
@@ -196,22 +260,41 @@ function App() {
           </p>
         </div>
 
-        <button
-          className="kitchen-button"
-          onClick={toggleKitchenView}
-        >
-          {view === "menu" ? (
-            <>
-              <ChefHat size={17} />
-              Painel da cozinha
-            </>
-          ) : (
-            <>
-              <ArrowRight size={17} />
-              Voltar ao cardápio
-            </>
+        <div className="hero-actions">
+          {role === "admin" && (
+            <button
+              className="kitchen-button"
+              onClick={toggleKitchenView}
+            >
+              {view === "menu" ? (
+                <>
+                  <ChefHat size={17} />
+                  Painel da cozinha
+                </>
+              ) : (
+                <>
+                  <ArrowRight size={17} />
+                  Voltar ao cardápio
+                </>
+              )}
+            </button>
           )}
-        </button>
+
+          <div className="account-menu">
+            <div className="account-details">
+              <UserRound size={18} />
+              <div>
+                <strong>{user}</strong>
+                <span>{role === "admin" ? "Administrador" : "Cliente"}</span>
+              </div>
+            </div>
+
+            <button className="logout-button" onClick={logout}>
+              <LogOut size={16} />
+              Sair
+            </button>
+          </div>
+        </div>
       </header>
 
       {view === "menu" ? (
@@ -264,39 +347,6 @@ function App() {
           </section>
 
           <aside className="sidebar">
-            <div className="login-card">
-              <h2>Acesso da equipe</h2>
-
-              <label>Usuário</label>
-              <input
-                type="text"
-                placeholder="seu.usuario"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-              />
-
-              <label>Senha</label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              <button className="login-button" onClick={handleLogin}>
-                <LogIn size={17} />
-                Entrar
-              </button>
-
-              {loginMessage && (
-                <p className="login-message" role="status">
-                  {loginMessage}
-                </p>
-              )}
-
-              <a href="#senha">Esqueceu a senha?</a>
-            </div>
-
             <div className="cart-card">
               <div className="cart-title">
                 <ShoppingCart size={21} />
@@ -351,6 +401,12 @@ function App() {
                   Finalizar
                 </button>
               </div>
+
+              {orderMessage && (
+                <p className="order-message" role="status">
+                  {orderMessage}
+                </p>
+              )}
             </div>
           </aside>
         </main>
@@ -401,19 +457,21 @@ function App() {
                       <strong>R$ {order.total.toFixed(2).replace(".", ",")}</strong>
                     </div>
 
-                    <div className="order-actions" aria-label="Status do pedido">
-                      {["Recebido", "Preparando", "Pronto", "Entregue"].map(
-                        (status) => (
-                          <button
-                            className={order.status === status ? "active" : ""}
-                            key={status}
-                            onClick={() => updateOrderStatus(order.id, status)}
-                          >
-                            {status}
-                          </button>
-                        ),
-                      )}
-                    </div>
+                    {role === "admin" && (
+                      <div className="order-actions" aria-label="Status do pedido">
+                        {["Recebido", "Preparando", "Pronto", "Entregue"].map(
+                          (status) => (
+                            <button
+                              className={order.status === status ? "active" : ""}
+                              key={status}
+                              onClick={() => updateOrderStatus(order.id, status)}
+                            >
+                              {status}
+                            </button>
+                          ),
+                        )}
+                      </div>
+                    )}
                   </section>
                 ))}
               </div>
